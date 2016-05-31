@@ -1,0 +1,101 @@
+package org.genivi.appfw
+
+<**
+	@description : This interface is exposed by app manager to privileged apps 
+**>
+
+interface AppManager_Core
+{
+	<**
+		@description : This method provides the information of the app from manifest data encapsulated in the AppInfo struct 
+	**>
+	method GetAppInfo
+	{
+		in
+		{
+			String app_name
+		}
+		out
+		{
+			AppInfo info
+		}
+	}
+	
+	<** 
+		@description : this gives the current active application (the one which is currently being displayed)
+	**>
+		 
+	attribute String CurrentActiveApp readonly
+	
+	method LaunchApp
+	{
+		in
+		{
+			String app_name
+		}
+		
+	}
+	
+	<** @description :
+		Miminizes current application.This results in minimizing a window and bringing up the previous app and it's window.
+	**>
+	method MinimizeApplication {}
+	
+	<** @description :
+		Maximises current application.This results in maximizing the window(which was minimised) and hiding the currently shown window
+	**>
+	method MaximizeApplication{}
+	
+	method GetAppMimeTable
+	{
+		out
+		{
+			AppMimeInfo[] app
+		}
+	}
+	
+	<**
+		@description : fetches manifest data of all apps installed.returns an array of AppInfo struct
+	**>
+	method GetInstalledApps
+	{
+		out
+		{
+			AppInfo[] apps
+		}
+	
+	}
+	<**
+		@description : This should signal the addition or deletion of new apps, change in capability of apps to handle mimes etc. It si adviced to call GetAppMimeTable and GetInstalledApps as needed when this broadcast is received.  
+	**>
+	
+	broadcast AppsInfoUpdated {}	
+	
+	
+	<**
+		@description : AppInfo is a reflection of manifest data. The manifest should be a part of app bundle and app manager extracts and stores this data
+	**>
+	
+	struct AppInfo
+	{
+		String app_name
+		String app_icon
+		String exec_path
+		UInt32 exec_type
+		String category_name
+		String category_icon
+		String[] mimes
+		String launch_args		
+	}
+	
+	<**
+		@description : This is a double array or a hash table of apps and their supported mimes. Compiled by app manager from manifest information
+	**>
+	
+	struct AppMimeInfo
+	{
+		String app_name
+		String[] mimes
+	}
+	
+}
