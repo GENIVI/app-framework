@@ -12,17 +12,6 @@ interface AppManager {
 		minor 1		
 	}
 
-<**
-	@description : All apps register to app manager to receive app status
-	app_name is the name of the application.
-**>
-
-	method RegisterMyApp {
-		in {
-			String app_name 
-		}
-	}
-	
 
 	
 	<**
@@ -31,8 +20,8 @@ interface AppManager {
 	broadcast NewAppState
 	{
 		out{
-			 String app_name
-			 String app_state
+			 String app_id
+			 AppState app_state
 		}
 	}
 	

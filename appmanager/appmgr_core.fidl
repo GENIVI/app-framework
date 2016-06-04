@@ -7,13 +7,26 @@ package org.genivi.appfw
 interface AppManager_Core
 {
 	<**
-		@description : This method provides the information of the app from manifest data encapsulated in the AppInfo struct 
+		@description : a function to enumerate all apps in the system. It returns an array of app IDs which are reverse DNS style names 
+		stored by app manager during app installation 
+	**>
+	method GetInstalledApps
+	{
+		out
+		{
+			String[] app_ids
+		}
+	}
+	
+	<**
+		@description : This method provides the information of the app from manifest data encapsulated in the AppInfo struct
+		app_id is a reverse DNS style name of the app which should be a part of manifest information 
 	**>
 	method GetAppInfo
 	{
 		in
 		{
-			String app_name
+			String app_id
 		}
 		out
 		{
@@ -21,50 +34,28 @@ interface AppManager_Core
 		}
 	}
 	
+	
+	
 	<** 
 		@description : this gives the current active application (the one which is currently being displayed)
 	**>
 		 
 	attribute String CurrentActiveApp readonly
 	
+	<**
+		@description : launch an app using the app_id. App manager resolves the app_id to an entry point and launches it.
+	**>
+	
 	method LaunchApp
 	{
 		in
 		{
-			String app_name
+			String app_id
 		}
 		
 	}
 	
-	<** @description :
-		Miminizes current application.This results in minimizing a window and bringing up the previous app and it's window.
-	**>
-	method MinimizeApplication {}
 	
-	<** @description :
-		Maximises current application.This results in maximizing the window(which was minimised) and hiding the currently shown window
-	**>
-	method MaximizeApplication{}
-	
-	method GetAppMimeTable
-	{
-		out
-		{
-			AppMimeInfo[] app
-		}
-	}
-	
-	<**
-		@description : fetches manifest data of all apps installed.returns an array of AppInfo struct
-	**>
-	method GetInstalledApps
-	{
-		out
-		{
-			AppInfo[] apps
-		}
-	
-	}
 	<**
 		@description : This should signal the addition or deletion of new apps, change in capability of apps to handle mimes etc. It si adviced to call GetAppMimeTable and GetInstalledApps as needed when this broadcast is received.  
 	**>
@@ -73,29 +64,11 @@ interface AppManager_Core
 	
 	
 	<**
-		@description : AppInfo is a reflection of manifest data. The manifest should be a part of app bundle and app manager extracts and stores this data
+		@description : AppInfo is a map of manifest data. It stores Key and value as strings .The manifest should be a part of app bundle and app manager extracts and stores this data
 	**>
-	
-	struct AppInfo
+	map AppInfo
 	{
-		String app_name
-		String app_icon
-		String exec_path
-		UInt32 exec_type
-		String category_name
-		String category_icon
-		String[] mimes
-		String launch_args		
-	}
-	
-	<**
-		@description : This is a double array or a hash table of apps and their supported mimes. Compiled by app manager from manifest information
-	**>
-	
-	struct AppMimeInfo
-	{
-		String app_name
-		String[] mimes
+		String to String
 	}
 	
 }
