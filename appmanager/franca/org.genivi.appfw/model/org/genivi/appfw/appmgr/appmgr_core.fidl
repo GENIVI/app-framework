@@ -54,11 +54,12 @@ interface AppManager_Core
 	**>
 	struct AppInfo
 	{
-                String app_id
-                KeyValue values
+		String app_id
+		KeyValue values
 	}
 
-	map KeyValue {
-                String to String
-        }
+	map KeyValue
+	{
+		String to String
+	}
 }

@@ -1,10 +1,10 @@
 package org.genivi.appfw
 
-<**
-    @description  : App manager interface.
+	<**
+		@description  : App manager interface.
 
-                    This interface encapsulates the interfaces for managed apps
-**>
+		This interface encapsulates the interfaces for managed apps
+	**>
 interface AppManager {
 	version {
 		major 0
@@ -17,9 +17,9 @@ interface AppManager {
 	broadcast NewAppState
 	{
 		out{
-			 String app_id
-			 AppState app_state
-		}
+				String app_id
+				AppState app_state
+			}
 	}
 
 	<**
