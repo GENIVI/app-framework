@@ -3,7 +3,7 @@ package org.genivi.appfw
 	<**
 		@description  : App manager interface.
 
-		This interface encapsulates the interfaces for managed apps
+		This is a generic interface for Application Manager instance(s) for Managed Apps.
 	**>
 interface AppManager {
 	version {
@@ -12,7 +12,7 @@ interface AppManager {
 	}
 
 	<**
-		@description : this broadcast is for any state change of app. The receiving cleints are supposed to check if it's meant for them. 
+		@description : This broadcast is every time an application state changes. The receiving clients are supposed to check if it's meant for them.
 	**>
 	broadcast NewAppState
 	{
@@ -23,14 +23,15 @@ interface AppManager {
 	}
 
 	<**
-		@description : this method can be called by apps to handle content which is not in the apps's mime list. E.g Hotels app providing a phone number to call cannot handle the phoen funtionality but needs to delegate it.
-		it needs to form a URI according to http://www.iana.org/assignments/uri-schemes/uri-schemes.xhtml and call this method from app manager to delegate it. 
+		@description : This method can be called by apps to request that the App Manager finds a handler for the content as given by the URI. For example, a Hotel finding application has identified a phone number and the user wants to call it.  Application Manager knows which application is able to provide phone functionality and will delegate the request to it.
+		The parameter needs to be a Uniform Resource Identifier (URI) according to http://www.iana.org/assignments/uri-schemes/uri-schemes.xhtml 
+		and is expected to encode (using MIME-types or other encoding) the necessary information to perform the action, or to fetch using the URI, the required information.
 	**>
 	method OpenUri
 	{
 		in
 		{
-			String uri_scheme 	
+			String uri_scheme	
 		}
 	}
 
