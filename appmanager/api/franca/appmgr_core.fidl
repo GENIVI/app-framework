@@ -1,12 +1,14 @@
 package org.genivi.appfw
 
 <**
-	@description : This interface exposes information about the installed and running applications. It shall typically be exposed by App Manager only to priviledged apps/processes that would need such information.
+	@description : App manager interfaces to privileged apps.
+	This interface exposes information about the installed and running applications. It shall typically be exposed by App Manager only to priviledged apps/processes that would need such information.
+	An example is a Launcher process which would need information provided by this interface
 **>
 interface AppManager_Core
 {
 	<**
-		@description : Returns an array of app IDs which are reverse DNS style names stored by app manager during app installation
+		@description : This method returns an array of app IDs which are reverse DNS style names stored by app manager during app installation
 	**>
 	method GetInstalledApps
 	{
@@ -33,7 +35,7 @@ interface AppManager_Core
 	}
 
 	<**
-		@description : Launch an app using the app_id. App manager resolves the app_id to an entry point and launches it.
+		@description : This method launchs an app using the app_id. App manager resolves the app_id to an entry point and launches it.
 	**>
 	method LaunchApp
 	{
@@ -44,12 +46,14 @@ interface AppManager_Core
 	}
 	
 	<**
-		@description : This signal is sent whenever the addition or deletion of new apps, change in capability of apps to handle mimes or similar changes. It is recommended to call GetAppMimeTable and GetInstalledApps as needed when this broadcast is received.
+		@description : This broadcast is emitted whenever there is addition or deletion of apps, change in capability of apps to handle mimes or similar changes.
+		It is recommended to call GetInstalledApps and GetAppInfo (on interested apps) as needed when this broadcast is received.
 	**>
 	broadcast AppsInfoUpdated {}
 
 	<**
-		@description : AppInfo is a map of manifest data. It stores manifest data as a Key-value map. The manifest should be a part of app bundle and app manager extracts and stores this data
+		@description : This is a structure for providing manifest details of an app as a Key-value map.
+		The manifest should be a part of app bundle and app manager extracts and stores this data
 	**>
 	struct AppInfo
 	{
