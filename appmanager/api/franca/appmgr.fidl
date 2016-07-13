@@ -3,7 +3,8 @@ package org.genivi.appfw
 	<**
 		@description  : App manager interface to managed apps
 
-		Managed applications are those that are installed from marketplace or app store. Once installed, they are managed by app manager. This interface defines the interactions between managed apps and app manager
+		Managed applications are those that are installed from marketplace or app store. Once installed, they are managed by 
+		app manager. This interface defines the interactions between managed apps and app manager
 	**>
 interface AppManager {
 	version {
@@ -12,9 +13,10 @@ interface AppManager {
 	}
 
 	<**
-		@description : This broadcast is emitted every time an application state changes. The receiving apps are expected to check if it's meant for them using the app_id param.
-		The app manager changes the state of apps based on user interaction or system trigger. It emits this signal in order to notify an app of it's state change.
-		The app is expected to check the state and change it's behavior accordingly.
+		@description : This broadcast is emitted every time an application state changes. The receiving apps are expected to 
+		check if it's meant for them using the app_id param. The app manager changes the state of apps based on user interaction 
+		or system trigger. It emits this signal in order to notify an app of it's state change.The app is expected to check the 
+		state and change it's behavior accordingly.
 	**>
 	broadcast NewAppState
 	{
@@ -25,10 +27,12 @@ interface AppManager {
 	}
 
 	<**
-		@description : This method can be called by apps to request the App Manager to find a handler for the content as given by the URI. For example, a Hotel finding application has identified a phone number and the user wants to call it.
+		@description : This method can be called by apps to request the App Manager to find a handler for the content as 
+		given by the URI. For example, a Hotel finding application has identified a phone number and the user wants to call it.
 		Application Manager knows which application is able to provide phone functionality and will delegate the request to it.
-		The parameter needs to be a Uniform Resource Identifier (URI) according to http://www.iana.org/assignments/uri-schemes/uri-schemes.xhtml 
-		and is expected to encode (using MIME-types or other encoding) the necessary information to perform the action, or to fetch using the URI, the required information.
+		The parameter needs to be a Uniform Resource Identifier (URI) according to 
+		http://www.iana.org/assignments/uri-schemes/uri-schemes.xhtml and is expected to encode (using MIME-types or other encoding) 
+		the necessary information to perform the action, or to fetch using the URI, the required information.
 	**>
 	method OpenUri
 	{
@@ -41,10 +45,12 @@ interface AppManager {
 	<**
 		@description : These are the states that would be used in the broadcast NewAppState.
 		APP_STATE_START : State sent when app is started. App can perform initialization of resources
-		APP_STATE_BACKGROUND : State to indicate that the current app will be overcast by another app. The app might want to kill UI resources and terminate it's window
+		APP_STATE_BACKGROUND : State to indicate that the current app will be overcast by another app. The app might 
+		                       want to kill UI resources and terminate it's window
 		APP_STATE_SHOW : State to indicate that the app will be displayed to user. Typically moved from APP_STATE_BACKGROUND
 		APP_STATE_RESTART : State to indicate the app to change from APP_STATE_PAUSE state to start again
-		APP_STATE_OFF : State to indicate that app will be terminated. App can store relevant data to persistent memory before exiting
+		APP_STATE_OFF : State to indicate that app will be terminated. App can store relevant data to persistent memory 
+		                before exiting
 		APP_STATE_PAUSE : State to indicate the app to freeze. This is not killing the process but suspended
 	**>
 
