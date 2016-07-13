@@ -1,13 +1,12 @@
 package org.genivi.appfw
 
 <**
-	@description : This interface is exposed by app manager to privileged apps 
+	@description : This interface exposes information about the installed and running applications. It shall typically be exposed by App Manager only to priviledged apps/processes that would need such information.
 **>
 interface AppManager_Core
 {
 	<**
-		@description : a function to enumerate all apps in the system. It returns an array of app IDs which are reverse DNS style names 
-		stored by app manager during app installation 
+		@description : Returns an array of app IDs which are reverse DNS style names stored by app manager during app installation
 	**>
 	method GetInstalledApps
 	{
@@ -18,8 +17,8 @@ interface AppManager_Core
 	}
 	
 	<**
-		@description : This method provides the information of the app from manifest data encapsulated in the AppInfo struct
-		app_id is a reverse DNS style name of the app which should be a part of manifest information 
+		@description : This method provides the information of the app from manifest data encapsulated in the AppInfo struct.
+		app_id is a reverse DNS style name of the app which should be a part of manifest information.
 	**>
 	method GetAppInfo
 	{
@@ -34,7 +33,7 @@ interface AppManager_Core
 	}
 
 	<**
-		@description : launch an app using the app_id. App manager resolves the app_id to an entry point and launches it.
+		@description : Launch an app using the app_id. App manager resolves the app_id to an entry point and launches it.
 	**>
 	method LaunchApp
 	{
@@ -45,12 +44,12 @@ interface AppManager_Core
 	}
 	
 	<**
-		@description : This should signal the addition or deletion of new apps, change in capability of apps to handle mimes etc. It si adviced to call GetAppMimeTable and GetInstalledApps as needed when this broadcast is received.  
+		@description : This signal is sent whenever the addition or deletion of new apps, change in capability of apps to handle mimes or similar changes. It is recommended to call GetAppMimeTable and GetInstalledApps as needed when this broadcast is received.
 	**>
-	broadcast AppsInfoUpdated {}	
+	broadcast AppsInfoUpdated {}
 
 	<**
-		@description : AppInfo is a map of manifest data. It stores Key and value as strings .The manifest should be a part of app bundle and app manager extracts and stores this data
+		@description : AppInfo is a map of manifest data. It stores manifest data as a Key-value map. The manifest should be a part of app bundle and app manager extracts and stores this data
 	**>
 	struct AppInfo
 	{
