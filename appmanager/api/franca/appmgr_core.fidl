@@ -2,7 +2,7 @@ package org.genivi.appfw
 
 <**
 	@description : App manager interfaces to privileged apps.This interface exposes information about the installed and running 
-	applications. It shall typically be exposed by App Manager only to priviledged apps/processes that would need such information.
+	applications. It shall typically be exposed by App Manager only to privileged apps/processes that would need such information.
 	An example is a Launcher process which would need information provided by this interface
 **>
 interface AppManager_Core
@@ -36,7 +36,7 @@ interface AppManager_Core
 	}
 
 	<**
-		@description : This method launchs an app using the app_id. App manager resolves the app_id to an entry point 
+		@description : This method launches an app using the app_id. App manager resolves the app_id to an entry point 
 		and launches it.
 	**>
 	method LaunchApp
