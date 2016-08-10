@@ -3,7 +3,13 @@
 ## Synopsis
 The App Manager component is a part of the Application Framework Infrastructure set of components, 
 aimed at supporting apps, in a GENIVI setting. The App Manager is responsible for the handling the app 
-life-cycle.
+life-cycle of a Managed Apps.
+
+### Managed Apps are
+- Downloadable apps
+- Third party developed Apps
+- It provides full sandboxing
+
 
 ## Motivation
 
