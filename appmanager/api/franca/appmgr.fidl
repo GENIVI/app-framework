@@ -44,6 +44,8 @@ interface AppManager {
 
 	<**
 		@description : These are the states that would be used in the broadcast NewAppState.
+		The Apps states are in general UI dependent and is a product specific. The states that are defined below 
+		is an example,
 		APP_STATE_START : State sent when app is started. App can perform initialization of resources
 		APP_STATE_BACKGROUND : State to indicate that the current app will be overcast by another app. The app might 
 		                       want to kill UI resources and terminate it's window
