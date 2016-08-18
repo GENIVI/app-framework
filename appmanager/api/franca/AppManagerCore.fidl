@@ -5,7 +5,7 @@ package org.genivi.appfw
 	applications. It shall typically be exposed by App Manager only to privileged apps/processes that would need such information.
 	An example is a Launcher process which would need information provided by this interface
 **>
-interface AppManager_Core
+interface AppManagerCore
 {
 	<**
 		@description : This method returns an array of app IDs which are reverse DNS style names stored by app manager 
