@@ -18,11 +18,11 @@ interface AppManager {
 		or system trigger. It emits this signal in order to notify an app of it's state change.The app is expected to check the 
 		state and change it's behavior accordingly.
 	**>
-	broadcast NewAppState
+	broadcast newAppState
 	{
 		out{
-				String app_id
-				AppState app_state
+				String AppId
+				AppState AppState
 			}
 	}
 
@@ -34,11 +34,11 @@ interface AppManager {
 		http://www.iana.org/assignments/uri-schemes/uri-schemes.xhtml and is expected to encode (using MIME-types or other encoding) 
 		the necessary information to perform the action, or to fetch using the URI, the required information.
 	**>
-	method OpenUri
+	method openURI
 	{
 		in
 		{
-			String uri_scheme	
+			String URIScheme	
 		}
 	}
 
