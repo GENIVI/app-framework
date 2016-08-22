@@ -22,7 +22,7 @@ interface AppManager {
 	{
 		out{
 				String AppId
-				AppState AppState
+				AppState AppStates
 			}
 	}
 
