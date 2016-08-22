@@ -14,7 +14,7 @@ interface AppManager {
 
 	<**
 		@description : This broadcast is emitted every time an application state changes. The receiving apps are expected to 
-		check if it's meant for them using the app_id param. The app manager changes the state of apps based on user interaction 
+		check if it's meant for them using the AppId param. The app manager changes the state of apps based on user interaction 
 		or system trigger. It emits this signal in order to notify an app of it's state change.The app is expected to check the 
 		state and change it's behavior accordingly.
 	**>
@@ -43,7 +43,7 @@ interface AppManager {
 	}
 
 	<**
-		@description : These are the states that would be used in the broadcast NewAppState.
+		@description : These are the states that would be used in the broadcast newAppState.
 		The Apps states are in general UI dependent and is a product specific. The states that are defined below 
 		is an example,
 		APP_STATE_START : State sent when app is started. App can perform initialization of resources
