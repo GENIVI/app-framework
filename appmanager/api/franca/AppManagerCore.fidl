@@ -21,7 +21,7 @@ interface AppManagerCore
 	
 	<**
 		@description : This method provides the information of the app from manifest data encapsulated in the AppInfo struct.
-		app_id is a reverse DNS style name of the app which should be a part of manifest information.
+		AppId is a reverse DNS style name of the app which should be a part of manifest information.
 	**>
 	method getAppInfo
 	{
@@ -36,7 +36,7 @@ interface AppManagerCore
 	}
 
 	<**
-		@description : This method launches an app using the app_id. App manager resolves the app_id to an entry point 
+		@description : This method launches an app using the AppId. App manager resolves the AppId to an entry point 
 		and launches it.
 	**>
 	method launchApp
@@ -49,7 +49,7 @@ interface AppManagerCore
 	
 	<**
 		@description : This broadcast is emitted whenever there is addition or deletion of apps, change in capability of 
-		apps to handle mimes or similar changes.It is recommended to call GetInstalledApps and GetAppInfo (on interested apps)
+		apps to handle mimes or similar changes.It is recommended to call getInstalledApps and getAppInfo (on interested apps)
 		as needed when this broadcast is received.
 	**>
 	broadcast appsInfoUpdated {}
