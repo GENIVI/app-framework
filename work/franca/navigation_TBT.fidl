@@ -1,0 +1,26 @@
+package _
+
+interface TurnByTurn {
+	map tNotify_hintsDict {
+		String to undefined
+	}
+
+	method Notify {
+		in {
+			UInt32 replaces_id
+			String icon_name
+			String summary
+			String body
+			tNotify_hintsDict hints
+			Int32 expire_timeout
+		}
+		out {
+			UInt32 id
+		}
+	}
+	method CloseNotification {
+		in {
+			UInt32 id
+		}
+	}
+}

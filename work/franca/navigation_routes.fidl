@@ -1,0 +1,9 @@
+package _
+
+interface Routes {
+
+	attribute Int32 CurrentRoute
+
+	attribute String [ ] Routes
+
+}

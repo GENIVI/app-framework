@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<node name="/" xmlns:doc="http://www.freedesktop.org/dbus/1.0/doc.dtd" xsi:noNamespaceSchemaLocation="introspect.xsd" >
+<!--
+  org.apertis.Navigation1.Routes:
+  @short_description: Interface exposing navigation routes
+  @since: 0.1.0
+
+  This API is meant to be implemented by the navigation backend to expose
+  the current and potential navigation routes to SDK applications.
+
+  The backend should claim the org.apertis.Navigation1 well-known name
+  and expose the /org/apertis/Navigation1/Routes object.
+
+  Changes are notified using the standard org.freedesktop.DBus.Properties
+  signals.
+
+  The object implementing this interface should also implement the standard
+  org.freedesktop.DBus.ObjectManager interface. Changes to the Routes
+  property should also be notified using this interface so clients don't have
+  to manually fetch the properties of each route.
+  Implementations should first announce newly created routes using the
+  ObjectManager.InterfacesAdded signal before updating the Routes property
+  so clients are already aware of new objects when they are added.
+-->
+
+<interface name="org.apertis.Navigation1.Routes">
+  <!--
+  CurrentRoute:
+  @since: 0.1.0
+
+  The index into Routes of the current active route, or -1 if
+  there is currently no active route.
+  -->
+  <property name="CurrentRoute" type="i" access="read"/>
+
+  <!--
+  Routes:
+  @since: 0.1.0
+
+  Paths of Route objects representing potential routes with the
+  most highly recommended ones first.
+  -->
+  <property name="Routes" type="ao" access="read"/>
+
+</interface>
+
+</node>

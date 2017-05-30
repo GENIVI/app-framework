@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<node name="/" xmlns:doc="http://www.freedesktop.org/dbus/1.0/doc.dtd" xsi:noNamespaceSchemaLocation="introspect.xsd" >
+<!--
+  org.apertis.NavigationGuidance1.TurnByTurn.xml:
+  @short_description: interface to display turn-by-turn guidance notifications
+  @since: 0.1612.0
+
+  This interface is meant to be implemented by the system component responsible for displaying
+  turn-by-turn guidance notifications.
+  The navigation backend will use this API to notify users when they have to change direction
+  to follow the route configured in the navigation system.
+  The details about the route can be found using the org.apertis.Navigation1.Routes API.
+
+  The backend should claim the org.apertis.NavigationGuidance1.TurnByTurn
+  well-known name and expose the /org/apertis/NavigationGuidance1/TurnByTurn
+  object.
+
+  The design of this API is based heavily on the freedesktop.org
+  <a href="https://people.gnome.org/~mccann/docs/notification-spec/notification-spec-latest.html>Notifications specification</a>.
+-->
+
+<interface name="org.apertis.NavigationGuidance1.TurnByTurn">
+  <!--
+  Notify:
+  @since: 0.1612.0
+  @replaces_id: the optional notification ID that this notification replaces. The server must atomically (ie with no flicker or other visual cues) replace the given notification with this one. This allows clients to effectively modify the notification while it's active. A value of value of 0 means that this notification won't replace any existing notifications.
+  @icon_name: the optional icon describing the type of guidance in this notification. Can be an empty string, indicating no icon.
+  @summary: the summary text briefly describing the notification.
+  @body: The optional detailed body text. Can be empty.
+  @hints: optional hints that can be passed to the server from the client program. None is defined so far.
+  @expire_timeout: the timeout time in milliseconds since the display of the notification at which the notification should automatically close. If -1, the notification's expiration time is dependent on the notification server's settings, and may vary for the type of notification. If 0, never expire.
+  @id: If @replaces_id is 0, the return value is a UINT32 that represents the notification. It is unique, and will not be reused unless a MAXINT number of notifications have been generated. An acceptable implementation may just use an incrementing counter for the ID. The returned ID is always greater than zero. If @replaces_id is not 0, the returned value is the same value as @replaces_id.
+
+  Send a turn-by-turn notification informing the user about a change of direction.
+  -->
+  <method name="Notify">
+    <arg name="replaces_id" direction="in" type="u"/>
+    <arg name="icon_name" direction="in" type="s"/>
+    <arg name="summary" direction="in" type="s"/>
+    <arg name="body" direction="in" type="s"/>
+    <arg name="hints" direction="in" type="a{sv}"/>
+    <arg name="expire_timeout" direction="in" type="i"/>
+    <arg name="id" direction="out" type="u"/>
+  </method>
+
+  <!--
+  CloseNotification:
+  @since: 0.1612.0
+  @id: a notification ID, previously returned by org.apertis.NavigationGuidance1.TurnByTurn.Notify()
+
+  Causes a notification to be forcefully closed and removed from the user's view. It can be used, for example,
+  if the navigation system detects that the current turn-by-turn notification is no longer relevant based on the
+  new position of the vehicle, or to cancel a notification with no expiration time.
+  -->
+  <method name="CloseNotification">
+    <arg name="id" direction="in" type="u"/>
+  </method>
+
+</interface>
+
+</node>
