@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<node name="/" xmlns:doc="http://www.freedesktop.org/dbus/1.0/doc.dtd" xsi:noNamespaceSchemaLocation="introspect.xsd" >
+<!--
+  org.apertis.Tinwell.Recorder:
+  @short_description: The Tinwell provides interface for recording of audio streams
+  @since: 1.0
+
+  Tinwell recorder interface serves for recording of audio streams. Recorder interface provides different functions
+  like recording audio, pause recording, resume recording etc and different signals to indicate recording states.
+  Recorder interface depends on the audio recorder library GrassmoorAudioRecorder which in turn makes use of the 
+  Gstreamer, a library for audio/video streaming. Recorder interface uses canterbury Audio Managr service to 
+  request for audio resource for recording.Recording is for now only be supported in speex format.	
+-->
+
+<interface name="org.apertis.Tinwell.Recorder">
+
+	<!--
+	RegisterRecorder:
+	@app_name: Name of the client application that is registering to the tinwell service
+	@reg_state: Boolean value to indicate if registration was successful or not
+	@since: 1.0
+
+	Function requested by any audio recorder application to register itself to the tinwell service recorder
+  -->
+  <method name="RegisterRecorder">
+	  <annotation name="org.freedesktop.DBus.GLib.Async" value=""/>
+	  <arg name="app_name" direction="in" type="s"/>
+	  <arg name="reg_state" direction="out" type="b"/>
+  </method>
+
+  <!--
+	UnregisterRecorder:
+	@app_name: Name of the recorder application that is unregistering from the tinwell service
+	@reg_state: Boolean value to indicate if unregistration was successful or not
+	@since: 1.0
+
+	Function requested by any audio recorder application to unregister itself from the tinwell service
+  -->
+  <method name="UnregisterRecorder">
+	  <annotation name="org.freedesktop.DBus.GLib.Async" value=""/>
+	  <arg name="app_name" direction="in" type="s"/>
+	  <arg name="reg_state" direction="out" type="b"/>
+  </method>
+  
+  <!--
+	StartRecording:
+	@app_name: Name of the client application that wishes to record an audio stream
+	@file_path: Path where the recording file needs to be stored
+	@since: 1.0
+
+	Function requested by any audio recorder application that wishes to start recording
+  -->
+  <method name="StartRecording">
+	  <annotation name="org.freedesktop.DBus.GLib.Async" value=""/>
+	  <arg name="app_name" direction="in" type="s"/>
+	  <arg name="file_path" direction="in" type="s"/>
+  </method>
+  
+  <!--
+	StopRecording:
+	@app_name: Name of the client application that wishes to stop recording an audio stream
+	@since: 1.0
+
+	Function requested by any audio recorder application that wishes to stop recording
+	(Recording that has been previously started)
+  -->
+  <method name="StopRecording">
+	  <annotation name="org.freedesktop.DBus.GLib.Async" value=""/>
+	  <arg name="app_name" direction="in" type="s"/>
+  </method>
+  
+  <!--
+	PauseRecording:
+	@app_name: Name of the client application that wishes to pause recording an audio stream
+	@since: 1.0
+
+	Function requested by any audio recorder application that wishes to pause recording
+	(Recording that has been previously started)
+  -->
+  <method name="PauseRecording">
+	  <annotation name="org.freedesktop.DBus.GLib.Async" value=""/>
+	  <arg name="app_name" direction="in" type="s"/>
+  </method>
+  
+  <!--
+	ResumeRecording:
+	@app_name: Name of the client application that wishes to resume recording an audio stream
+	@since: 1.0
+
+	Function requested by any audio recorder application that wishes to resume recording
+	(Recording that has been previously paused)
+  -->
+  <method name="ResumeRecording">
+	  <annotation name="org.freedesktop.DBus.GLib.Async" value=""/>
+	  <arg name="app_name" direction="in" type="s"/>
+  </method>
+
+  <!--
+	RecordingError:
+	@app_name: Name of the client application for which there is an error in the recorder
+	@err_msg: Error Message
+	@since: 1.0
+
+	If there is any error in recording that is informed to the client
+   -->
+  <signal name="RecordingError">
+	  <arg name="app_name" type="s"/>
+	  <arg name="err_msg" type="s"/>
+  </signal>
+
+  <!--
+	RecordingStarted:
+	@app_name: Name of the client application for which recording has started
+	@since: 1.0
+
+	Signal to indicate start of recording
+   -->
+  <signal name="RecordingStarted">
+	  <arg name="app_name" type="s"/>
+  </signal>
+
+  <!--
+	RecordingCompleted:
+	@app_name: Name of the client application for which recording has been completed
+	@file_path: Path where the recorded file is available
+	@since: 1.0
+
+	Signal to indicate completion of recording
+   -->
+  <signal name="RecordingCompleted">
+	  <arg name="app_name" type="s"/>
+	  <arg name="file_path" type="s"/>
+  </signal>
+
+  <!--
+	RecordingPaused:
+	@app_name: Name of the client application for which recording has been paused
+	@since: 1.0
+
+	Signal to indicate pause in recording
+   -->
+  <signal name="RecordingPaused">
+	  <arg name="app_name" type="s"/>
+  </signal>
+
+  <!--
+	RecordingResumed:
+	@app_name: Name of the client application for which recording has been resumed
+	@since: 1.0
+
+	Signal to indicate resume in recording
+   -->
+  <signal name="RecordingResumed">
+	  <arg name="app_name" type="s"/>
+  </signal>
+
+</interface>
+</node>
