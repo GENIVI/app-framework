@@ -1,0 +1,68 @@
+package _
+
+interface Recorder {
+	broadcast RecordingError {
+		out {
+			String app_name
+			String err_msg
+		}
+	}
+	broadcast RecordingStarted {
+		out {
+			String app_name
+		}
+	}
+	broadcast RecordingCompleted {
+		out {
+			String app_name
+			String file_path
+		}
+	}
+	broadcast RecordingPaused {
+		out {
+			String app_name
+		}
+	}
+	broadcast RecordingResumed {
+		out {
+			String app_name
+		}
+	}
+	method RegisterRecorder {
+		in {
+			String app_name
+		}
+		out {
+			Boolean reg_state
+		}
+	}
+	method UnregisterRecorder {
+		in {
+			String app_name
+		}
+		out {
+			Boolean reg_state
+		}
+	}
+	method StartRecording {
+		in {
+			String app_name
+			String file_path
+		}
+	}
+	method StopRecording {
+		in {
+			String app_name
+		}
+	}
+	method PauseRecording {
+		in {
+			String app_name
+		}
+	}
+	method ResumeRecording {
+		in {
+			String app_name
+		}
+	}
+}
