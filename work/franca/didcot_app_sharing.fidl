@@ -1,0 +1,9 @@
+package _
+
+interface Launch {
+	method OpenURI {
+		in {
+			String uri
+		}
+	}
+}

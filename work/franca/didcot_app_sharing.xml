@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<node name="/" xmlns:doc="http://www.freedesktop.org/dbus/1.0/doc.dtd" xsi:noNamespaceSchemaLocation="introspect.xsd" >
+<!--
+  org.apertis.Didcot.Launch:
+  @short_description: This interface is used to delegate the content to another application supporting it.
+  @since: 1.0
+
+  This interface provides content hand-over.Content hand-over is when
+  an application is asked by the user to open a file it doesn't know how
+  to handle or to start a service it is not responsible for providing.
+  
+  This interface provides a simple SDK API didcot_open_uri(const gchar *uri)
+  method to hand over the content to  the application supporting it.
+  Every application can support one or more uri schemes and mime types .
+  This service is responsible for displaying list of applications supporting
+  particular (uri scheme/mime type)  or launch the application
+  if there is only one application supporting this (uri scheme/mime type).
+  
+  for example a mp3 audio file can be launched by various music player
+  applications which supports same mime type("audio/mpeg").
+  An application that is able to handle a given content type
+  should declare that in its app entry file.
+  
+Ex: Audio player application supporting "audio/mpeg","audio/ogg" mime types
+should specify by making entry with key as "mime-type" in its .desktop file.
+
+```
+MimeType=audio/mpeg;
+```
+	
+Ex: Email application supporting "mailto" uri scheme should specify by making
+entry with key as "uri-schemes" in its .desktop file.
+
+```
+MimeType=x-scheme-handler/mailto;
+```
+	
+Didcot is the service which handles launching applications.
+It is responsible for taking requests from applications for handling files or services.
+The service will rely on the app entry information provided by the applications
+to know which application knows how to handle a given file format or service.
+
+When given file:// URIs as input parameter for didcot_launch_call_open_uri() method,
+Didcot will sniff the content type from the file and look for applications
+that can handle that type on the app entry (MimeType entry in .desktop).
+Similarly, when given any non-file URI, Didcot will look for apps
+that can handle that scheme in the database(MimeType entry in .desktop).
+If there is more than one application that can handle the file or scheme,
+Didcot may decide to present a popup asking the user to select
+which one they would prefer to use
+
+After Didcot launches the corresponding application It has to handle
+the content will get the content in arguments in its `main()` method and
+it should take the corresponding action.If app is already in the running
+in background state it gets "new-app-state" signal from app manager
+where it can get argument list.
+ 
+example of handling uri by receiving application in `main()` method:
+
+```
+void
+main (int argc, char** argv)
+{
+  gint count = 0;
+  for (count = 0; count < argc; count++)
+    {
+      if (g_strcmp0 (argv[count], "launch") == 0)
+        {
+          gchar *received_uri = argv[count + 1];  // uri which is sent by the any other application through LaunchAppForUri() method.
+        }
+    }
+}
+``` 
+
+example of handling uri by receiving application in "new-app-state" signal
+callback which is emited by canterbury:
+
+```
+gboolean
+new_app_state_cb (CanterburyAppManager *object,
+                  const gchar *arg_app_name,
+                  guint arg_app_state,
+                  GVariant *arg_arguments)
+{
+  GVariantIter iter;
+  g_variant_iter_init (&iter, arg_arguments);
+  gchar *key = NULL;
+  gchar *value = NULL;
+  while (g_variant_iter_next (&keyiter, "{ss}", &key, &value))
+    {
+      if (g_strcmp0 (key, "launch") == 0)
+       /* uri of the content */
+        gchar *received_uri = value;
+    }
+}
+```
+
+```
+#include <glib.h>
+#include <glib/gstdio.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <gio/gio.h>
+#include "didcot.h"
+
+static void
+didcot_open_uri_cb (GObject *source_object,
+                    GAsyncResult *res,
+                    gpointer user_data)
+{
+  GError *error = NULL;
+  DidcotLaunch *launch_proxy = user_data;
+
+  if (!didcot_launch_call_open_uri_finish (launch_proxy, res, &error))
+    {
+      g_warning ("%s: code %d: %s", g_quark_to_string (error->domain),
+                 error->code, error->message);
+      g_error_free (error);
+    }
+}
+
+static void
+data_launch_proxy_created_cb (GObject *source_object,
+                              GAsyncResult *res,
+                              gpointer user_data)
+{
+  GError *error = NULL;
+  const gchar *uri = "geo:37.786971,-122.399677";
+  DidcotLaunch *launch_proxy = didcot_launch_proxy_new_finish (res, &error);
+
+  /* This api will show list of applications supporting "geo" uri
+   or launch the application if there is only one application supporting
+   this uri */
+  didcot_launch_call_open_uri (launch_proxy, uri, NULL, didcot_open_uri_cb,
+                               launch_proxy);
+  if (error)
+    {
+      g_warning ("%s: code %d: %s", g_quark_to_string (error->domain),
+                 error->code, error->message);
+      g_error_free (error);
+    }
+}
+
+static void
+name_appeared_cb (GDBusConnection *connection,
+                  const gchar *name,
+                  const gchar *name_owner,
+                  gpointer user_data)
+{
+  GError *error = NULL;
+
+  didcot_launch_proxy_new (connection, G_DBUS_PROXY_FLAGS_NONE,
+                           "org.apertis.Didcot", "/org/apertis/Didcot/Launch",
+                           NULL, data_launch_proxy_created_cb, &error);
+  if (error)
+    {
+      g_warning ("%s: code %d: %s", g_quark_to_string (error->domain),
+                 error->code, error->message);
+      g_error_free (error);
+    }
+}
+
+static void
+name_vanished_cb (GDBusConnection *connection,
+                  const gchar *name,
+                  gpointer user_data)
+{
+  g_debug ("name_vanished");
+}
+
+gint
+main (gint argc, gchar *argv[])
+{
+  GMainLoop *mainloop = NULL;
+  /* Starts watching name on the bus specified by bus_type */
+  g_bus_watch_name (G_BUS_TYPE_SESSION, "org.apertis.Didcot",
+                    G_BUS_NAME_WATCHER_FLAGS_AUTO_START, name_appeared_cb,
+                    name_vanished_cb, NULL, NULL);
+  mainloop = g_main_loop_new (NULL, FALSE);
+  g_main_loop_run (mainloop);
+  return 0;
+}
+```
+
+-->
+<interface name="org.apertis.Didcot.Launch">
+
+<!--
+    OpenURI:
+    @uri: The URI to open, using a scheme registered with IANA.
+    For example, a map application might handle the "maps" URI scheme,
+     with URIs like "maps:q=Cambridge"; a telephony application might handle
+     the "tel" scheme, with URIs like "tel:+441223362967".
+    @since: 1.0
+
+   This method is used to launch an application which supports the URI scheme
+   which is part of URI requested by client application.If there are multiple
+   applications supporting the URI scheme then user will be notified by a popup
+   to select the application to launch.When the corresponding application
+   is launched it receives URI as an argument.
+  -->
+  <method name="OpenURI">
+    <annotation name="org.freedesktop.DBus.GLib.Async" value=""/>
+    <arg name="uri" direction="in" type="s"/>
+
+  </method>
+
+
+</interface>
+</node>

@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<node name="/" xmlns:doc="http://www.freedesktop.org/dbus/1.0/doc.dtd" xsi:noNamespaceSchemaLocation="introspect.xsd" >
+<!--
+  org.apertis.Canterbury.AppManager:
+  @short_description: Application manager is the main service that starts up all the other services and apps. It provides APIs to create and manage apps
+  @since: 1.0
+  
+  Application Manager is the heart of the application framework. The application manager is started by the SystemD at startup. App manager in turn starts the other services and applications. It launches a set of services to support various functionalities as listed below. These services are part of its process space :
+  <itemizedlist>
+  	<listitem>Launch Manager<para>Launch manager is responsible for book keeping of app database.</para></listitem>
+  	<listitem>Activity Manager<para>Maintains a stack of applications and manages their states. The applications can take the states SHOW, HIDE, PAUSED, OFF</para></listitem>
+  	<listitem>Hard key manager<para>Provides APIs for Hardkey or face plate events. App manager also has a deafult implementation for BACK and HOME keys</para></listitem>
+  	<listitem>Audio manager<para>The Audio Manager service of application manager takes control of the audio management and maintains all the audio resource information</para></listitem>
+  	<listitem>Window manager<para>The Window manager framework is responsible for controlling the placement and appearance of application windows on the screen and also providing windowing animations during launch and exit of an application</para></listitem>  	
+  </itemizedlist>
+  <para>
+    App manager reads the application manifest and compiles a database which is used by many other services like launcher and global search. It also maintains the app window IDs and handles the windows when apps are killed or moved to other states like Pause, Background etc
+  </para>
+   
+
+-->
+
+<interface name="org.apertis.Canterbury.AppManager">
+
+  <!--
+    RegisterMyApp:
+    @app_name: name of the client application
+    @window_id: window id of the client window
+    @since: 1.0
+
+    All applications register to application manager at startup with their window ID to receive application states
+  -->
+  <method name="RegisterMyApp">
+   <arg name="app_name" direction="in" type="s"/>
+   <arg name="window_id" direction="in" type="t"/>
+  </method>
+
+  <!--
+    NewAppState:
+    @app_name: name of the application
+    @app_state: the new application state
+    @arguments: the argument list for an app when restarted from pause/background state
+    @since: 1.0
+
+    Signals defining its application states
+  -->
+  <signal name="NewAppState">
+    <arg name="app_name" type="s"/>
+    <arg name="app_state" type="u"/>
+    <arg name="arguments" type="a{ss}"/>
+  </signal>
+
+  <!--
+    HideGlobalPopups:
+    @since: 1.0
+
+    Signal asking to hide any popups being shown, this can occur if user presses back button or launches a new app
+  -->
+  <signal name="HideGlobalPopups">
+  </signal>
+
+
+  <!--
+    CurrentActiveApp:
+    @since: 1.0
+
+    Get the current active application on top of the application stack
+  -->
+  <property name="CurrentActiveApp" type="s" access="read"/>
+
+  <!--
+    CurrentActiveAudioSource:
+    @since: 1.0
+
+    The current application that holds the audio resource.
+  -->
+  <property name="CurrentActiveAudioSource" type="s" access="read"/>
+
+  <!--
+    CurrentActiveAppRequiresInternet:
+    @since: 1.0
+
+    The property is used to check if the current active app requires the internet resource
+  -->
+  <property name="CurrentActiveAppRequiresInternet" type="b" access="read"/>
+
+  <!--
+    InsertNewEntry:
+    @app_name: name of the application
+    @main_menu_label: List of all the categories to be loaded into the main menu
+    @main_menu_icon: List of all the icons corresponding to each category to be loaded into the main menu
+    @quick_menu_label: List of all the entries to be loaded into the quick menu
+    @quick_menu_icon: List of all the icons corresponding to each item to be loaded into the quick menu
+    @tile_thumbnails: List of all the application tile thumbnails to be loaded into home screen
+    @new_app_status: The app manager would give status messages based on the avaialbility of the service
+    @progress: shows the progress of the installation/download
+    @since: 1.0
+
+    Launcher displays categories of applications and the list of applications in each category. If a new category or app needs to be added to Launcher, this API should be used.
+  -->
+  <method name="InsertNewEntry">
+    <arg name="app_name" direction="in" type="s"/>
+    <arg name="main_menu_label" direction="in" type="as"/>
+    <arg name="main_menu_icon"  direction="in" type="as"/>
+    <arg name="quick_menu_label" direction="in" type="as"/>
+    <arg name="quick_menu_icon" direction="in" type="as"/>
+    <arg name="tile_thumbnails" direction="in" type="as"/>
+    <arg name="new_app_status" direction="in" type="u"/>
+    <arg name="progress" direction="in" type="d"/>
+  </method>
+
+  <!--
+    GetApplicationInfo:
+    @app_name: name of the application
+    @app_icon: icon for the application
+    @app_type: Type of the application: whether Internal/External/Service/Agent
+    @background-state: Background state of an application
+    @category: The application category
+    @audio-resource-type: Audio resource type for the application
+    @since: 1.0
+
+    Get the details about an application within the system. This information that can be obtained from app-manager are: Type of application (E.g Application/Service), Back ground state of the application, Category related information. Pass the app name as a parameter to this API 
+  -->
+  <method name="GetApplicationInfo">
+    <arg name="app_name" direction="in" type="s"/>
+    <arg name="app_icon" direction="out" type="s"/>
+    <arg name="app_type" direction="out" type="u"/>
+    <arg name="background_state"  direction="out" type="u"/>
+    <arg name="category" direction="out" type="s"/>
+    <arg name="category_icon" direction="out" type="s"/>
+    <arg name="audio_resource_type" direction="out" type="u"/>
+  </method>
+
+  <!--
+    SetInstalledApplicationManifest:
+    @app_manifest: manifest name of application
+    @since: 1.0
+
+    Set the manifest file of the installed application. Typically used for app store apps. App manager reads all manifest files from the manifest path for app-store apps. App Manager then updates the application database with the read information.
+  -->
+  <method name="SetInstalledApplicationManifest">
+    <arg name="app_manifest" direction="in" type="s"/>
+  </method>
+
+  <!--
+    SetUninstalledApplication:
+    @app_manifest: manifest name of application
+    @update_only: This flag is used to say if the app is already installed and only an update is necessary
+    @since: 1.0
+
+    Set the application manifest name which is uninstalled. Whenever an app is uninstalled, this API needs to be called so that app manager updates the app database accordingly.
+  -->
+  <method name="SetUninstalledApplication">
+    <arg name="app_manifest" direction="in" type="s"/>
+    <arg name="update_only" direction="in" type="b"/>
+  </method>
+  
+  <!--
+    GetGlobalSearchApps:
+    @app_list - returns a list of app names
+    @since: 1.0
+    
+
+    Global search is distributed over all apps. So, each application needs to indicate if it supports global search or not using the manifest. Since app manager reads manifests, it can easily provide this information for global search service.
+  -->  
+  
+  <method name="GetGlobalSearchApps">
+ 	 <arg name="app_list" direction="out" type="as"/>
+  </method>  
+
+</interface>
+</node>
