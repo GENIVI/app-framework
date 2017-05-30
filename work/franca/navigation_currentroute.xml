@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<node name="/" xmlns:doc="http://www.freedesktop.org/dbus/1.0/doc.dtd" xsi:noNamespaceSchemaLocation="introspect.xsd" >
+<!--
+  org.apertis.NavigationGuidance1.Progress.xml:
+  @short_description: interface exposing information about progress on the current route
+  @since: 0.1612.0
+
+  This API is meant to be implemented by the navigation backend to expose
+  information about progress on the current route.
+
+  When a new journey is started from the navigation system the StartTime
+  and EstimatedEndTime properties should be set accordingly.
+  The details about the route followed by this journey can be found using the
+  org.apertis.Navigation1.Routes API.
+
+  The backend should claim the org.apertis.NavigationGuidance1.Progress
+  well-known name and expose the /org/apertis/NavigationGuidance1/Progress
+  object.
+
+  Changes are notified using the standard org.freedesktop.DBus.Properties
+  signals.
+
+-->
+
+<interface name="org.apertis.NavigationGuidance1.Progress">
+  <!--
+  StartTime:
+  @since: 0.1612.0
+
+  A UNIX timestamp, to be interpreted in the local timezone, containing
+  the time when the current journey has been started, or 0 if there is
+  currently no ongoing journey.
+  -->
+  <property name="StartTime" type="t" access="read"/>
+
+  <!--
+  EstimatedEndTime:
+  @since: 0.1612.0
+
+  A UNIX timestamp, to be interpreted in the local timezone, containing
+  an estimation of when the destination of the current route will be reached,
+  or 0 if not available.
+
+  This property may change during the journey when the estimation is being
+  updated.
+  -->
+  <property name="EstimatedEndTime" type="t" access="read"/>
+
+</interface>
+
+</node>
+

@@ -1,0 +1,33 @@
+package _
+
+interface Route {
+
+	<**
+		@description : struct generated for DBus argument Geometry
+	**>
+	struct tGeometryStruct {
+		Double elem1
+		Double elem2
+	}
+
+	map tTitleDict {
+		String to String
+	}
+
+	map tGeometryDescriptionsValueDict {
+		String to String
+	}
+
+	map tGeometryDescriptionsDict {
+		UInt32 to tGeometryDescriptionsValueDict
+	} attribute tGeometryStruct [ ] Geometry
+
+	attribute UInt32 TotalDistance
+
+	attribute UInt32 TotalTime
+
+	attribute tTitleDict Title
+
+	attribute tGeometryDescriptionsDict GeometryDescriptions
+
+}

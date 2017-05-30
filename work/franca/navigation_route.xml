@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<node name="/" xmlns:doc="http://www.freedesktop.org/dbus/1.0/doc.dtd" xsi:noNamespaceSchemaLocation="introspect.xsd" >
+<!--
+  org.apertis.Navigation1.Route:
+  @short_description: Interface representing a potential route
+  @since: 0.1.0
+
+  Each Route object represents a potential navigation route.
+
+  Route objects are immutable once created. Any change should be done by
+  adding a new route and removing the old one.
+-->
+
+<interface name="org.apertis.Navigation1.Route">
+  <!--
+  Geometry:
+  @since: 0.1.0
+
+  Array of latitude-longitude pairs in order, from the start point to the
+  destination (inclusive).
+  This array is guaranteed to have at least two entries: the start and the
+  destination of the route.
+  -->
+  <property name="Geometry" type="a(dd)" access="read"/>
+
+  <!--
+  TotalDistance:
+  @since: 0.1.0
+
+  The total distance covered by the route, in metres.
+  -->
+  <property name="TotalDistance" type="u" access="read"/>
+
+  <!--
+  TotalTime:
+  @since: 0.1.0
+
+  An estimation of the total time, in seconds, needed to travel along
+  this route from start to destination (not from the current vehicle
+  position).
+  -->
+  <property name="TotalTime" type="u" access="read"/>
+
+  <!--
+  Title:
+  @since: 0.1.0
+
+  Mapping from language name to a human-readable title of the route in this language.
+  Language names are using the POSIX locale format with locale identifiers defined by ISO 15897,
+  like 'fr_BE' for example.
+  -->
+  <property name="Title" type="a{ss}" access="read"/>
+
+  <!--
+  GeometryDescriptions:
+  @since: 0.1.0
+
+  An array of pairs of index and description. Each key represents an index
+  in the Geometry array and points to the
+  human-readable descriptions, indexed by language, of this point.
+  Language names use the same format as in the Title property.
+  -->
+  <property name="GeometryDescriptions" type="a{ua{ss}}" access="read"/>
+</interface>

@@ -1,0 +1,9 @@
+package _
+
+interface Progress {
+
+	attribute UInt64 StartTime
+
+	attribute UInt64 EstimatedEndTime
+
+}
