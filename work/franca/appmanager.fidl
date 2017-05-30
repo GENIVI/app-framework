@@ -1,0 +1,71 @@
+package _
+
+interface AppManager {
+	map tNewAppState_argumentsDict {
+		String to String
+	}
+
+	broadcast NewAppState {
+		out {
+			String app_name
+			UInt32 app_state
+			tNewAppState_argumentsDict arguments
+		}
+	}
+	broadcast HideGlobalPopups {
+	}
+	method RegisterMyApp {
+		in {
+			String app_name
+			UInt64 window_id
+		}
+	}
+	method InsertNewEntry {
+		in {
+			String app_name
+			String [ ] main_menu_label
+			String [ ] main_menu_icon
+			String [ ] quick_menu_label
+			String [ ] quick_menu_icon
+			String [ ] tile_thumbnails
+			UInt32 new_app_status
+			Double progress
+		}
+	}
+	method GetApplicationInfo {
+		in {
+			String app_name
+		}
+		out {
+			String app_icon
+			UInt32 app_type
+			UInt32 background_state
+			String category
+			String category_icon
+			UInt32 audio_resource_type
+		}
+	}
+	method SetInstalledApplicationManifest {
+		in {
+			String app_manifest
+		}
+	}
+	method SetUninstalledApplication {
+		in {
+			String app_manifest
+			Boolean update_only
+		}
+	}
+	method GetGlobalSearchApps {
+		out {
+			String [ ] app_list
+		}
+	}
+
+	attribute String CurrentActiveApp
+
+	attribute String CurrentActiveAudioSource
+
+	attribute Boolean CurrentActiveAppRequiresInternet
+
+}
