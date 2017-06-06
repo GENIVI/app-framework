@@ -1,5 +1,13 @@
 package _
 
+<**
+  @description :
+  org.apertis.Canterbury.AppManager:
+  short_description: Application manager is the main service that starts up all the other services and apps. 
+  It provides APIs to create and manage apps
+  since: 1.0
+  **>
+
 interface AppManager {
 	map tNewAppState_argumentsDict {
 		String to String
