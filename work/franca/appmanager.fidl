@@ -12,7 +12,14 @@ interface AppManager {
 	map tNewAppState_argumentsDict {
 		String to String
 	}
-
+ <**
+    NewAppState:
+    @app_name: name of the application
+    @app_state: the new application state
+    @arguments: the argument list for an app when restarted from pause/background state
+    @since: 1.0
+    Signals defining its application states
+  **>
 	broadcast NewAppState {
 		out {
 			String app_name
@@ -22,12 +29,35 @@ interface AppManager {
 	}
 	broadcast HideGlobalPopups {
 	}
+	
+	 <**
+	    RegisterMyApp:
+	    @app_name: name of the client application
+	    @window_id: window id of the client window
+	    @since: 1.0
+	    All applications register to application manager at startup with their window ID to receive application states
+  	**>
+	
 	method RegisterMyApp {
 		in {
 			String app_name
 			UInt64 window_id
 		}
 	}
+	
+	  <**
+		    InsertNewEntry:
+		    @app_name: name of the application
+		    @main_menu_label: List of all the categories to be loaded into the main menu
+		    @main_menu_icon: List of all the icons corresponding to each category to be loaded into the main menu
+		    @quick_menu_label: List of all the entries to be loaded into the quick menu
+		    @quick_menu_icon: List of all the icons corresponding to each item to be loaded into the quick menu
+		    @tile_thumbnails: List of all the application tile thumbnails to be loaded into home screen
+		    @new_app_status: The app manager would give status messages based on the avaialbility of the service
+		    @progress: shows the progress of the installation/download
+		    @since: 1.0
+		    Launcher displays categories of applications and the list of applications in each category. If a new category or app needs to be added to Launcher, this API should be used.
+		  **>
 	method InsertNewEntry {
 		in {
 			String app_name
@@ -40,6 +70,18 @@ interface AppManager {
 			Double progress
 		}
 	}
+	
+	  <**
+		    GetApplicationInfo:
+		    @app_name: name of the application
+		    @app_icon: icon for the application
+		    @app_type: Type of the application: whether Internal/External/Service/Agent
+		    @background-state: Background state of an application
+		    @category: The application category
+		    @audio-resource-type: Audio resource type for the application
+		    @since: 1.0
+		    Get the details about an application within the system. This information that can be obtained from app-manager are: Type of application (E.g Application/Service), Back ground state of the application, Category related information. Pass the app name as a parameter to this API 
+		  **>
 	method GetApplicationInfo {
 		in {
 			String app_name
@@ -53,26 +95,65 @@ interface AppManager {
 			UInt32 audio_resource_type
 		}
 	}
+	
+  	<**
+		    SetInstalledApplicationManifest:
+		    @app_manifest: manifest name of application
+		    @since: 1.0
+		    Set the manifest file of the installed application. Typically used for app store apps. App manager reads all manifest files from the manifest path for app-store apps. App Manager then updates the application database with the read information.
+		  **>
 	method SetInstalledApplicationManifest {
 		in {
 			String app_manifest
 		}
 	}
+	
+	  <**
+		    SetUninstalledApplication:
+		    @app_manifest: manifest name of application
+		    @update_only: This flag is used to say if the app is already installed and only an update is necessary
+		    @since: 1.0
+		    Set the application manifest name which is uninstalled. Whenever an app is uninstalled, this API needs to be called so that app manager updates the app database accordingly.
+		  **>
 	method SetUninstalledApplication {
 		in {
 			String app_manifest
 			Boolean update_only
 		}
 	}
+	
+	<**
+		    GetGlobalSearchApps:
+		    @app_list - returns a list of app names
+		    @since: 1.0
+		    Global search is distributed over all apps. So, each application needs to indicate if it supports global search or not using the manifest. Since app manager reads manifests, it can easily provide this information for global search service.
+		  **>  
+	
 	method GetGlobalSearchApps {
 		out {
 			String [ ] app_list
 		}
 	}
 
+	  <**
+	    CurrentActiveApp:
+	    @since: 1.0
+	    Get the current active application on top of the application stack
+  		**>
 	attribute String CurrentActiveApp
 
+	<**
+	    CurrentActiveAudioSource:
+	    @since: 1.0
+	    The current application that holds the audio resource.
+			  **>
 	attribute String CurrentActiveAudioSource
+	
+	<**
+	    CurrentActiveAppRequiresInternet:
+	    @since: 1.0
+	    The property is used to check if the current active app requires the internet resource
+		 **>
 
 	attribute Boolean CurrentActiveAppRequiresInternet
 
